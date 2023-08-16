@@ -42,6 +42,11 @@ p {
     margin-top: 30px;
     margin-left: 20px;
     color: azure;
+    display: flex;
+}
+p img{
+    margin-left: 21px;
+    height: 30px;
 }
 
 input {

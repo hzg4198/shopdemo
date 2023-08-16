@@ -1,5 +1,6 @@
+<%@ page import="java.net.URLDecoder" %>
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+         pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,17 +12,18 @@
 
 <body>
 <div id="loginDiv">
-    <%--action="${pageContext.request.contextPath }/admin/home.jsp"--%>
-    <form  action="/shop/LoginServlet" id="form">
+    <form  action="${pageContext.request.contextPath}/LoginServlet" id="form">
+<%--    <form  action="/shop/LoginServlet" id="form">--%>
         <h1 id="loginMsg">LOGIN IN</h1>
         <p>Username:<input id="username" name="username" type="text"></p>
         <p>Password:<input id="password" name="password" type="password"></p>
-        <p>验证码：<input id="verify" name="verify" type="text"><img src="/shop/CheckCodeServlet"></p>
-        <span><%= request.getAttribute("msg") != null ? request.getAttribute("msg") : "" %></span>
+        <p>验证码：<input id="verify" name="verify" type="text"><img id="verifyPic" src="${pageContext.request.contextPath}/CheckCodeServlet"></p>
+        <span style="margin-left: 20px;color:#FF5765"><%= request.getAttribute("msg") != null ? request.getAttribute("msg") : "" %></span>
+        <span style="margin-left: 20px;color: rgb(173,216,230)">${param.msg}</span>
         <div id="subDiv">
             <input type="submit" class="button" value="login up">
-            <input type="reset" class="button" value="reset">&nbsp;&nbsp;&nbsp;
-            <a href="register.html">没有账号？点击注册</a>
+            <input type="reset" class="button" value="reset">&nbsp;
+            <a href="${pageContext.request.contextPath}/admin/register.jsp">没有账号？点击注册</a>
         </div>
     </form>
 </div>

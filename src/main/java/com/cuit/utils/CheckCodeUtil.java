@@ -190,7 +190,12 @@ public class CheckCodeUtil {
         }
 
         g2.dispose();
-        ImageIO.write(image, "jpg", os);
+        try {
+            ImageIO.write(image, "jpg", os);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
     /**

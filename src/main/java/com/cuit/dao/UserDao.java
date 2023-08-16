@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface UserDao {
-//    @Select("select username,password from user where username = #{username} and password = #{password}")
     List<User> VerifyPassword(@Param("username") String username,@Param("password")  String password);
     List<User> findAll();
+    List<User> queryOne(@Param("username") String username);
+    int insertConsumer(@Param("uid") String uid, @Param("username") String username,@Param("password") String password);
+
 }

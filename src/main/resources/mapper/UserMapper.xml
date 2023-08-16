@@ -3,13 +3,21 @@
 <mapper namespace="com.cuit.dao.UserDao">
     <!--column="数据库列名" property="Java属性名" jdbcType="JDBC类型"-->
     <resultMap id="UserMap" type="com.cuit.entity.User">
-        <result property="username" column="username" jdbcType="VARCHAR"></result>
-        <result property="password" column="password" jdbcType="VARCHAR"></result>
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="findAll" resultMap="UserMap">
-        select username,password from user
+        select uid,username,password from user
     </select>
     <select id="VerifyPassword" resultMap="UserMap" parameterType="com.cuit.entity.User">
-        select username,password from user where username = #{username} and password = #{password}
+        select uid,username,password from user where username = #{username} and password = #{password}
     </select>
+    <select id="queryOne" resultMap="UserMap" parameterType="com.cuit.entity.User">
+        select uid,username,password from user where username = #{username}
+    </select>
+    <insert id="insertConsumer" parameterType="com.cuit.entity.User">
+        insert into user(uid,username,password)
+        VALUES (#{uid},#{username},#{password})
+    </insert>
 </mapper>
