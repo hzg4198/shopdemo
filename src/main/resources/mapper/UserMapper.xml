@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cuit.dao.UserDao">
+    <!--column="数据库列名" property="Java属性名" jdbcType="JDBC类型"-->
+    <resultMap id="UserMap" type="com.cuit.entity.User">
+        <result property="username" column="username" jdbcType="VARCHAR"></result>
+        <result property="password" column="password" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <select id="findAll" resultMap="UserMap">
+        select username,password from user
+    </select>
+    <select id="VerifyPassword" resultMap="UserMap" parameterType="com.cuit.entity.User">
+        select username,password from user where username = #{username} and password = #{password}
+    </select>
+</mapper>
