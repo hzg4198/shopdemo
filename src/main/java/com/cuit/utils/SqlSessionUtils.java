@@ -8,7 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ServletUtils {
+public class SqlSessionUtils {
     private static SqlSessionFactory sessionFactory;
     static {
         try {

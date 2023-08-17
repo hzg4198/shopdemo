@@ -3,7 +3,7 @@ package com.cuit.service.impl;
 import com.cuit.entity.User;
 import com.cuit.service.UserService;
 import com.cuit.utils.IdUtils;
-import com.cuit.utils.ServletUtils;
+import com.cuit.utils.SqlSessionUtils;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     private static SqlSession sqlSession;
     static {
-        sqlSession = ServletUtils.getSession();
+        sqlSession = SqlSessionUtils.getSession();
     }
     @Override
     public List<User> verifyPassword(User user) {
