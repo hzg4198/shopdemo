@@ -1,24 +1,28 @@
 package com.cuit.servlet;
 
 import com.cuit.entity.User;
-import com.cuit.utils.CheckCodeUtil;
-import com.cuit.utils.IdUtils;
-import com.cuit.utils.ServletUtils;
-import org.apache.ibatis.session.SqlSession;
+import com.cuit.service.impl.UserServiceImpl;
+import com.cuit.utils.VerifyCode;
+import org.apache.commons.beanutils.BeanUtils;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
+import java.util.List;
 
 @WebServlet(name = "RegisterServlet", value = "/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
+	private static UserServiceImpl userService;
+	static {userService = new UserServiceImpl();}
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//先验证验证码是否正确
-		if(!request.getParameter("verify").equalsIgnoreCase((String) getServletContext().getAttribute("verify"))){
+		if(!VerifyCode.verify(request)){
 			request.setAttribute("msg","验证码错误");
 			request.getRequestDispatcher("/admin/register.jsp?"+new Date().getTime()).forward(request, response);
 			return;
@@ -28,19 +32,20 @@ public class RegisterServlet extends HttpServlet {
 			request.getRequestDispatcher("/admin/register.jsp?"+new Date().getTime()).forward(request,response);
 			return;
 		}
-		SqlSession session = ServletUtils.getSession();
-		List<User> queryOne = session.selectList("queryOne", request.getParameter("username"));
-		if(!queryOne.isEmpty()){
+		//验证通过，可以注册
+		User user = new User();
+		try {
+			BeanUtils.populate(user,request.getParameterMap());
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+		List<User> users = userService.queryOne(user);
+		if(!users.isEmpty()){
 			request.setAttribute("msg","用户名已存在");
 			request.getRequestDispatcher("/admin/register.jsp?"+new Date().getTime()).forward(request,response);
 		}else {
-			Map<String ,Object> params = new HashMap<>();
-			params.put("uid",IdUtils.getUid());
-			params.put("username",request.getParameter("username"));
-			params.put("password",request.getParameter("password"));
-			int ans = session.insert("insertConsumer", params);
+			int ans = userService.insertConsumer(user);
 			if(ans > 0){
-				session.commit();
 				response.sendRedirect(request.getContextPath()+"/admin/index.jsp?msg=Register success,please Login");
 			}
 		}

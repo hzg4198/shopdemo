@@ -14,8 +14,8 @@ public class CheckCodeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletOutputStream outputStream = response.getOutputStream();
         String s = CheckCodeUtil.outputVerifyImage(100, 35, outputStream, 4);
-        ServletContext servletContext = getServletContext();
-        servletContext.setAttribute("verify",s);
+        HttpSession session = request.getSession();
+        session.setAttribute("verify",s);
     }
 
     @Override

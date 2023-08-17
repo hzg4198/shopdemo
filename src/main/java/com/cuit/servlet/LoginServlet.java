@@ -1,42 +1,51 @@
 package com.cuit.servlet;
 
 import com.cuit.entity.User;
-import com.cuit.utils.CheckCodeUtil;
-import com.cuit.utils.ServletUtils;
-import org.apache.ibatis.session.SqlSession;
+import com.cuit.service.impl.UserServiceImpl;
+import com.cuit.utils.VerifyCode;
+import org.apache.commons.beanutils.BeanUtils;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "LoginServlet", value = "/LoginServlet")
 public class LoginServlet extends HttpServlet {
+    private static UserServiceImpl userService;
+    static {userService = new UserServiceImpl();}
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //先验证验证码是否正确
-        if(!request.getParameter("verify").equalsIgnoreCase(((String)getServletContext().getAttribute("verify")))){
+        boolean verify = VerifyCode.verify(request);
+        if(!verify){
             request.setAttribute("msg","验证码错误");
             request.getRequestDispatcher("/admin/index.jsp?"+new Date().getTime()).forward(request,response);
             return;
         }
-        SqlSession session = ServletUtils.getSession();
-        Map<String,Object> params = new HashMap<>();
-        params.put("username",request.getParameter("username"));
-        params.put("password",request.getParameter("password"));
-        List<User> verifyPassword = session.selectList("VerifyPassword", params);
-        if(verifyPassword.isEmpty()){
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        User user = new User();
+        try {
+            BeanUtils.populate(user,parameterMap);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        List<User> users = userService.verifyPassword(user);
+        if(users.isEmpty()){
             request.setAttribute("msg","用户名或密码错误");
             request.getRequestDispatcher("/admin/index.jsp?"+new Date().getTime()).forward(request,response);
         }else {
-            System.out.println("登录成功");
+            HttpSession session = request.getSession();
+            session.setAttribute("username",user.getUsername());
             response.sendRedirect(request.getContextPath()+"/admin/home.jsp");
         }
-        //登陆成功
 
     }
 

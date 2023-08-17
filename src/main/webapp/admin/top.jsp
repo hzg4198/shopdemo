@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
+<%@page isELIgnored="false" %>
 <html>
 	<head>
 		<meta http-equiv="Content-Language" content="zh-cn">
@@ -57,7 +58,7 @@ TH {
 										<td width="155" valign="bottom"
 											background="${pageContext.request.contextPath}/images/mis_05b.jpg">
 											用户名：
-											<font color="blue">zhangsan</font>
+											<font color="blue">${sessionScope.username}</font>
 										</td>
 										<td width="10" align="right"
 											background="${pageContext.request.contextPath}/images/mis_05b.jpg">
