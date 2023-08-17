@@ -7,15 +7,19 @@
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
     </resultMap>
+
     <select id="findAll" resultMap="UserMap">
         select uid,username,password from user
     </select>
+
     <select id="VerifyPassword" resultMap="UserMap" parameterType="com.cuit.entity.User">
         select uid,username,password from user where username = #{username} and password = #{password}
     </select>
+
     <select id="queryOne" resultMap="UserMap" parameterType="com.cuit.entity.User">
         select uid,username,password from user where username = #{username}
     </select>
+
     <insert id="insertConsumer" parameterType="com.cuit.entity.User">
         insert into user(uid,username,password)
         VALUES (#{uid},#{username},#{password})
