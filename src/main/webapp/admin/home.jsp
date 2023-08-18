@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 	<head>
 		<meta http-equiv="Content-Language" content="zh-cn">
@@ -15,8 +16,16 @@
   <frame src="${pageContext.request.contextPath}/admin/top.jsp" name="topFrame" scrolling="NO" noresize>
   <frameset cols="159,*" frameborder="0" border="0" framespacing="0">
 		<frame src="${pageContext.request.contextPath}/admin/left.jsp" name="leftFrame" noresize scrolling="YES">
-		<frame src="${pageContext.request.contextPath}/admin/welcome.jsp" name="mainFrame">
+		<frame src="${pageContext.request.contextPath}/admin/product/list.jsp" name="mainFrame">
   </frameset>
   <frame src="${pageContext.request.contextPath}/admin/bottom.jsp" name="bottomFrame" scrolling="NO"  noresize>
 </frameset>
+<%--    <script>--%>
+<%--        var list = '<%=request.getAttribute("productList")%>'--%>
+<%--        console.log(list)--%>
+<%--        if(list=='null'){--%>
+<%--            location.href="/shop/ProductServlet";--%>
+<%--        }--%>
+<%--        console.log(list)--%>
+<%--    </script>--%>
 </html>

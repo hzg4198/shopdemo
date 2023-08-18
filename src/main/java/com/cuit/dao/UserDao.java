@@ -2,7 +2,6 @@ package com.cuit.dao;
 
 import com.cuit.entity.User;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

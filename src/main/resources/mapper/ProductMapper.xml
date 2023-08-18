@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cuit.dao.ProductDao">
+    <!--column="数据库列名" property="Java属性名" jdbcType="JDBC类型"-->
+    <resultMap id="ProductMap" type="com.cuit.entity.Product">
+        <result property="pid" column="pid"/>
+        <result property="pname" column="pname" />
+        <result property="market_price" column="market_price" />
+        <result property="shop_price" column="shop_price" />
+        <result property="pimage" column="pimage" />
+        <result property="pdate" column="pdate" />
+        <result property="is_hot" column="is_hot" />
+        <result property="pdesc" column="pdesc" />
+        <result property="pflag" column="pflag" />
+        <result property="cid" column="cid" />
+    </resultMap>
+
+    <select id="findAllProduct" resultMap="ProductMap">
+        select * from product
+    </select>
+
+</mapper>
