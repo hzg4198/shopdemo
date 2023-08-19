@@ -86,11 +86,9 @@
 </body>
 <script>
 	var list = '<%=request.getAttribute("productList")%>'
-	console.log(list)
 	if(list=='null'){
 		location.href="/shop/ProductServlet";
 	}
-	console.log(list)
 </script>
 </HTML>
 

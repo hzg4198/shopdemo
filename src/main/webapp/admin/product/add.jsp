@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <HTML>
 	<HEAD>
 		<meta http-equiv="Content-Language" content="zh-cn">
@@ -8,7 +9,7 @@
 	
 	<body>
 		<!--  -->
-		<form id="userAction_save_do" name="Form1" action="${pageContext.request.contextPath}/adminProduct_save.action" method="post" enctype="multipart/form-data">
+		<form id="userAction_save_do" name="Form1" action="${pageContext.request.contextPath}/AddServlet" method="post" enctype="multipart/form-data">
 			&nbsp;
 			<table cellSpacing="1" cellPadding="5" width="100%" align="center" bgColor="#eeeeee" style="border: 1px solid #8ba7e3" border="0">
 				<tr>
@@ -41,13 +42,13 @@
 						市场价格：
 					</td>
 					<td class="ta_01" bgColor="#ffffff">
-						<input type="text" name="market_price" value="" id="userAction_save_do_logonName" class="bg"/>
+						<input type="text" name="market_price" value="" <%--id="userAction_save_do_logonName"--%> class="bg"/>
 					</td>
 					<td width="18%" align="center" bgColor="#f5fafe" class="ta_01">
 						商城价格：
 					</td>
 					<td class="ta_01" bgColor="#ffffff">
-						<input type="text" name="shop_price" value="" id="userAction_save_do_logonName" class="bg"/>
+						<input type="text" name="shop_price" value="" <%--id="userAction_save_do_logonName"--%> class="bg"/>
 					</td>
 				</tr>
 				<tr>
@@ -63,10 +64,10 @@
 						所属分类：
 					</td>
 					<td class="ta_01" bgColor="#ffffff" colspan="3">
-						<select name="categorySecond.csid">
-							<option value="">大型电器</option>
-							<option value="">手机数码</option>
-							<option value="">衣帽箱包</option>
+						<select name="cid">
+							<c:forEach items="${requestScope.categoryList}" var="items">
+								<option value="${items.cid}">${items.cname}</option>
+							</c:forEach>
 						</select>
 					</td>
 				</tr>
@@ -96,4 +97,10 @@
 			</table>
 		</form>
 	</body>
+<script>
+	const list = '<%=request.getAttribute("categoryList")%>'
+	if(list==='null'){
+		location.href="${pageContext.request.contextPath}/CategoryListServlet"
+	}
+</script>
 </HTML>

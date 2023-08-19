@@ -19,4 +19,8 @@
         select * from product
     </select>
 
+    <insert id="insertProduct" parameterType="com.cuit.entity.Product">
+        insert into product(pid, pname, market_price, shop_price, pimage, pdate, is_hot, pdesc, pflag, cid)
+        VALUES (#{pid},#{pname},#{market_price},#{shop_price},#{pimage},#{pdate},#{is_hot},#{pdesc},#{pflag},#{cid})
+    </insert>
 </mapper>
