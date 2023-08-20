@@ -28,6 +28,7 @@
 				</tr>
 				<tr>
 					<td class="ta_01" align="right">
+						<button type="button" id="delete" name="delete">删除</button>
 						<button type="button" id="add" name="add" value="添加"
 							class="button_add" onclick="addProduct()">
 							&#28155;&#21152;</button>
@@ -63,7 +64,7 @@
 											<td style="CURSOR: hand; HEIGHT: 22px" align="center"
 												width="17%">${product.is_hot==1?"是":"否"}</td>
 											<td align="center" style="HEIGHT: 22px"><a
-													href="${ pageContext.request.contextPath }/admin/product/edit.jsp">
+													href="${ pageContext.request.contextPath }/admin/product/edit.jsp?id=${product.pid}">
 												<img
 														src="${pageContext.request.contextPath}/images/i_edit.gif"
 														border="0" style="CURSOR: hand">
@@ -89,6 +90,7 @@
 	if(list=='null'){
 		location.href="/shop/ProductServlet";
 	}
+	console.log(list)
 </script>
 </HTML>
 

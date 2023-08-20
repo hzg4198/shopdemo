@@ -23,4 +23,21 @@
         insert into product(pid, pname, market_price, shop_price, pimage, pdate, is_hot, pdesc, pflag, cid)
         VALUES (#{pid},#{pname},#{market_price},#{shop_price},#{pimage},#{pdate},#{is_hot},#{pdesc},#{pflag},#{cid})
     </insert>
+
+<!--    <insert id="updateProduct" parameterType="com.cuit.entity.Product">-->
+<!--    </insert>-->
+    <update id="updateProduct" parameterType="com.cuit.entity.Product">
+        update product
+        <set>
+            pname=#{pname},
+            market_price=#{market_price},
+            shop_price=#{shop_price},
+            pdate=#{pdate},
+            is_hot=#{is_hot},
+            pdesc=#{pdesc},
+            pflag=#{pflag},
+            cid=#{cid},
+        </set>
+        where pid = #{pid}
+    </update>
 </mapper>

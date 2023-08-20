@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 @WebServlet(name = "LoginServlet", value = "/LoginServlet")
 public class LoginServlet extends HttpServlet {
     private static UserServiceImpl userService;
@@ -45,7 +46,6 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("username",user.getUsername());
             response.sendRedirect(request.getContextPath()+"/admin/home.jsp");
         }
-
     }
 
     @Override

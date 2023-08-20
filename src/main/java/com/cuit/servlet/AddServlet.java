@@ -1,8 +1,5 @@
 package com.cuit.servlet;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.map.multi.ListValueMap;
 import cn.hutool.core.net.multipart.MultipartFormData;
 import cn.hutool.core.net.multipart.UploadFile;
 import cn.hutool.core.net.multipart.UploadSetting;
@@ -11,22 +8,23 @@ import com.cuit.entity.Product;
 import com.cuit.service.impl.ProductServiceImpl;
 import org.apache.commons.beanutils.BeanUtils;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-import java.io.File;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
 
 @WebServlet(name = "AddServlet", value = "/AddServlet")
 public class AddServlet extends HttpServlet {
 	private ProductServiceImpl productService = new ProductServiceImpl();
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 		UploadSetting uploadSetting = new UploadSetting();
 		MultipartFormData multipart = ServletUtil.getMultipart(request, uploadSetting);
@@ -44,7 +42,6 @@ public class AddServlet extends HttpServlet {
 		}
 		long time = new Date().getTime();
 		System.out.println(product);
-		ServletContext servletContext = getServletContext();
 		UploadFile[] files = multipart.getFiles("upload");
 		for (UploadFile file : files) {
 			String decodedFileName = new String(file.getFileName().getBytes(), StandardCharsets.UTF_8);
