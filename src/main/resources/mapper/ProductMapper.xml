@@ -52,4 +52,17 @@
         select *
         from product where pname like concat('%',#{word},'%')
     </select>
+
+    <select id="queryPage" resultMap="ProductMap">
+        select * from product
+        <where>
+            <if test="cid != null">
+                and cid = #{cid}
+            </if>
+            <if test="keyWord != null and keyWord != ''">
+                and pname like concat('%', #{keyWord}, '%')
+            </if>
+        </where>
+        limit #{start},#{pageSize}
+    </select>
 </mapper>

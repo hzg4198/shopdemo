@@ -11,4 +11,5 @@ public interface ProductDao {
     int deleteById(int pid);
     int getTotalRecord();
     List<Product> findAllByWord(String word);
+    List<Product> queryPage(int start, int pageSize);
 }

@@ -1,10 +1,14 @@
 package com.cuit.servlet;
 
 import cn.hutool.extra.servlet.ServletUtil;
+import com.cuit.dao.UserDao;
 import com.cuit.entity.Category;
+import com.cuit.entity.PageBean;
 import com.cuit.entity.Product;
 import com.cuit.service.impl.CategoryServiceImpl;
 import com.cuit.service.impl.ProductServiceImpl;
+import com.cuit.utils.SqlSessionUtils;
+import org.apache.ibatis.session.SqlSession;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,8 +21,8 @@ import java.util.Map;
 
 @WebServlet(name = "ProductServlet", value = "/ProductServlet")
 public class ProductServlet extends HttpServlet {
-    private final ProductServiceImpl productService = new ProductServiceImpl();
-    private final CategoryServiceImpl categoryService = new CategoryServiceImpl();
+    ProductServiceImpl productService = new ProductServiceImpl();
+    CategoryServiceImpl categoryService = new CategoryServiceImpl();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
@@ -29,16 +33,19 @@ public class ProductServlet extends HttpServlet {
             System.out.println(s+"="+request.getHeader(s));
         }*/
         //是否可以依据不同的请求地址转发到对应的地址？
-        Map<String, String> paramMap = ServletUtil.getParamMap(request);
         //暂时只有cid 和 名称
-        for (Map.Entry<String, String> stringStringEntry : paramMap.entrySet()) {
-            System.out.println(stringStringEntry.getKey() + "=" + stringStringEntry.getValue());
-        }
+        String cid = request.getParameter("cid");
+        String keyWord = request.getParameter("word");
+        String pageNumber = request.getParameter("pageNumber");
 
+        String pageSize="5";
+        PageBean pageBean = productService.findAll(cid, keyWord, pageNumber, pageSize);
+        request.setAttribute("pageBean", pageBean);
+        request.setAttribute("pname",keyWord);
 
-        List<Product> productList = productService.findAllProduct();
+//        List<Product> productList = productService.findAllProduct();
         List<Category> category = categoryService.getCategory();
-        request.setAttribute("productList",productList);
+//        request.setAttribute("productList",productList);
         request.setAttribute("categoryList",category);
         request.getRequestDispatcher("/admin/product/list.jsp").forward(request,response);
     }

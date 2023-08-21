@@ -1,6 +1,7 @@
 package com.cuit.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import com.cuit.entity.PageBean;
 import com.cuit.entity.Product;
 import com.cuit.service.ProductService;
 import com.cuit.utils.SqlSessionUtils;
@@ -75,5 +76,39 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> findAllByWord(String word) {
         SqlSession sqlSession = SqlSessionUtils.getSession();
         return sqlSession.selectList("findAllByWord", word);
+    }
+
+    @Override
+    public List<Product> queryPage(int start, int pageSize) {
+        return null;
+    }
+
+    @Override
+    public PageBean findAll(String cid, String keyWord, String pageNumberStr, String pageSizeStr) {
+        Map<String,Object> params = new HashMap<>();
+        if (cid != null){
+            boolean flag = cid.equals("") || cid == null;
+            params.put("cid", flag? null:Integer.parseInt(cid));
+        }else {
+            params.put("cid",null);
+        }
+        params.put("keyWord",keyWord);
+        Integer pageNumber;
+        Integer pageSize = Integer.parseInt(pageSizeStr);
+        if(pageNumberStr==null||pageSizeStr.equals("")){
+            pageNumber = 1;
+        }else {
+            pageNumber = Integer.parseInt(pageNumberStr);
+        }
+        int totalRecord = getTotalRecord();
+        int totalPage = (totalRecord+pageSize-1)/pageSize;
+        //数据库查询的时候需要的开始索引
+        int startIndex=(pageNumber-1)*pageSize;
+        PageBean pageBean = new PageBean(pageNumber, pageSize, totalRecord, totalPage, startIndex);
+        params.put("start", startIndex);
+        params.put("pageSize", pageSize);
+        List<Product> list =  SqlSessionUtils.getSession().selectList("queryPage",params);
+        pageBean.setData(list);
+        return pageBean;
     }
 }

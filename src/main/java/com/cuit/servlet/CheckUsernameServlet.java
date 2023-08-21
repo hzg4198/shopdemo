@@ -15,11 +15,8 @@ import java.util.List;
 
 @WebServlet(name = "CheckUsernameServlet", value = "/CheckUsernameServlet")
 public class CheckUsernameServlet extends HttpServlet {
-    private final UserServiceImpl userService = new UserServiceImpl();
-    private static final List<User> allUser;
-    static {
-        allUser = new UserServiceImpl().findAll();
-    }
+    UserServiceImpl userService = new UserServiceImpl();
+    private static final List<User> allUser = new UserServiceImpl().findAll();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");

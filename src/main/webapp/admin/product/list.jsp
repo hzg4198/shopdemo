@@ -44,21 +44,21 @@
 				<tr>
 					<td class="ta_01" align="right">
 						<form href="${pageContext.request.contextPath}/ProductServlet">
-						商品分类：<select name="cid" id="categorySelect">
+						商品分类：<select name="cid" id="categorySelect" >
 									<option value="">---------</option>
 									<c:forEach items="${requestScope.categoryList}" var="items">
 										<option value="${items.cid}">${items.cname}</option>
 									</c:forEach>
 								</select>
-						商品名称:<input type="text" id="search" name="word"> <input id="queryKeyWord" type="submit" value="查询">
+						商品名称:<input type="text" id="search" name="word" value="${pname}"> <input  class="btn btn-primary"  id="queryKeyWord" type="submit" value="查询">
 						<div id="completeShow">
 							<ul id="itemul" class="list-group">
 								<!-- 		<li class="list-group-item">aaaa</li>	  -->
 							</ul>
 						</div>
 						</form>
-						<button type="button" id="delete" name="delete" >删除所选</button>
-						<button type="button" id="add" name="add" value="添加"
+						<button  class="btn btn-primary"  type="button" id="delete" name="delete" >删除所选</button>
+						<button  class="btn btn-primary"  type="button" id="add" name="add" value="添加"
 							class="button_add" onclick="addProduct()">
 							&#28155;&#21152;</button>
 
@@ -80,7 +80,7 @@
 								<td width="7%" align="center">编辑</td>
 								<td width="7%" align="center">删除</td>
 							</tr>
-									<c:forEach items="${requestScope.productList }" var="product">
+									<c:forEach items="${pageBean.data }" var="product">
 										<tr onmouseover="this.style.backgroundColor = 'white'"
 											onmouseout="this.style.backgroundColor = '#F5FAFE';">
 
@@ -119,16 +119,16 @@
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
 			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Previous">
+				<a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${pageBean.pageNumber-1 }" aria-label="Previous">
 					<span aria-hidden="true">&laquo;</span>
 				</a>
 			</li>
-			<c:forEach begin="1" end="10" var="i">
-				<li class="page-item"><a class="page-link" href="#">${i}</a></li>
+			<c:forEach begin="1" end="${pageBean.totalPage }" var="i">
+				<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${i }">${i}</a></li>
 			</c:forEach>
 
 			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Next">
+				<a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${i }" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
 			</li>
@@ -163,11 +163,12 @@
 		})
 	}
 	// $("#queryKeyWord").click(searchWord)
-	$("#search").keyup(searchWord)
-	var list = '<%=request.getAttribute("productList")%>'
-	if(list=='null'){
+	$("#search").blur(searchWord)
+	var list = "${pageBean.data}"
+	if(list=='null'||list==""){
 		location.href="/shop/ProductServlet";
 	}
+
 	var success = '${param.success}'
 	if(success !=null && success !==''){
 		if(success == 'true'){

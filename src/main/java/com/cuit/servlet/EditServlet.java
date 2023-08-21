@@ -18,7 +18,7 @@ import java.util.Map;
 
 @WebServlet(name = "EditServlet", value = "/EditServlet")
 public class EditServlet extends HttpServlet {
-    private ProductServiceImpl productService = new ProductServiceImpl();
+    ProductServiceImpl productService = new ProductServiceImpl();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");

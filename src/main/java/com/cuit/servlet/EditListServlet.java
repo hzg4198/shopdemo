@@ -13,8 +13,8 @@ import java.util.List;
 
 @WebServlet(name = "EditListServlet", value = "/EditListServlet")
 public class EditListServlet extends HttpServlet {
-    private ProductServiceImpl productService = new ProductServiceImpl();
-    private CategoryServiceImpl categoryService = new CategoryServiceImpl();
+    ProductServiceImpl productService = new ProductServiceImpl();
+    CategoryServiceImpl categoryService = new CategoryServiceImpl();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @WebServlet(name = "DeleteSelectServlet", value = "/DeleteSelectServlet")
 public class DeleteSelectServlet extends HttpServlet {
-    private final ProductServiceImpl productService = new ProductServiceImpl();
+    ProductServiceImpl productService = new ProductServiceImpl();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String selectIds = request.getParameter("selectIds");
