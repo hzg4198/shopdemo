@@ -4,23 +4,38 @@
 <HEAD>
 <meta http-equiv="Content-Language" content="zh-cn">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="${pageContext.request.contextPath}/css/Style1.css"
-	rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/webjars/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<%--<link href="${pageContext.request.contextPath}/css/Style1.css" rel="stylesheet" type="text/css" />--%>
+
 <%--<script language="javascript"--%>
 <%--	src="${pageContext.request.contextPath}/js/public.js"></script>--%>
 <script type="text/javascript">
 			function addProduct(){
 				window.location.href = "${pageContext.request.contextPath}/admin/product/add.jsp";
 			}
-		</script>
+</script>
+	<style>
+		#completeShow{
+			border: 1px solid #999;
+			min-height: 200px;
+			position: absolute;
+			width: 190px;
+			z-index: 100;
+			background-color: #fff;
+			left: 230px;
+			display: none
+		}
+	</style>
+
 </HEAD>
 <body>
 	<br>
 	<form id="Form1" name="Form1"
-		action="${pageContext.request.contextPath}/user/list.jsp"
+<%--		action="${pageContext.request.contextPath}/user/list.jsp"--%>
+			action="#"
 		method="post">
 		<table cellSpacing="1" cellPadding="0" width="100%" align="center"
-			bgColor="#f5fafe" border="0">
+			bgColor="#f5fafe" border="0" >
 			<TBODY>
 				<tr>
 					<td class="ta_01" align="center" bgColor="#afd1f3"><strong>商品列表</strong>
@@ -28,7 +43,21 @@
 				</tr>
 				<tr>
 					<td class="ta_01" align="right">
-						<button type="button" id="delete" name="delete">删除</button>
+						<form href="${pageContext.request.contextPath}/ProductServlet">
+						商品分类：<select name="cid" id="categorySelect">
+									<option value="">---------</option>
+									<c:forEach items="${requestScope.categoryList}" var="items">
+										<option value="${items.cid}">${items.cname}</option>
+									</c:forEach>
+								</select>
+						商品名称:<input type="text" id="search" name="word"> <input id="queryKeyWord" type="submit" value="查询">
+						<div id="completeShow">
+							<ul id="itemul" class="list-group">
+								<!-- 		<li class="list-group-item">aaaa</li>	  -->
+							</ul>
+						</div>
+						</form>
+						<button type="button" id="delete" name="delete" >删除所选</button>
 						<button type="button" id="add" name="add" value="添加"
 							class="button_add" onclick="addProduct()">
 							&#28155;&#21152;</button>
@@ -38,11 +67,12 @@
 				<tr>
 					<td class="ta_01" align="center" bgColor="#f5fafe">
 						<table cellspacing="0" cellpadding="1" rules="all"
-							bordercolor="gray" border="1" id="DataGrid1"
+							bordercolor="gray" border="1" id="DataGrid1" class="table-bordered"
 							style="BORDER-RIGHT: gray 1px solid; BORDER-TOP: gray 1px solid; BORDER-LEFT: gray 1px solid; WIDTH: 100%; WORD-BREAK: break-all; BORDER-BOTTOM: gray 1px solid; BORDER-COLLAPSE: collapse; BACKGROUND-COLOR: #f5fafe; WORD-WRAP: break-word">
 							<tr
 								style="FONT-WEIGHT: bold; FONT-SIZE: 12pt; HEIGHT: 25px; BACKGROUND-COLOR: #afd1f3">
-								<td align="center" width="18%">序号</td>
+								<td align="center" width="5%"><input type="checkbox" id="selectAll">全选</td>
+								<td align="center" width="9%">序号</td>
 								<td align="center" width="17%">商品图片</td>
 								<td align="center" width="17%">商品名称</td>
 								<td align="center" width="17%">商品价格</td>
@@ -53,8 +83,10 @@
 									<c:forEach items="${requestScope.productList }" var="product">
 										<tr onmouseover="this.style.backgroundColor = 'white'"
 											onmouseout="this.style.backgroundColor = '#F5FAFE';">
+
+											<td  align="center" width="5%"><input type="checkbox" value="${product.pid}" class="productBox"> </td>
 											<td style="CURSOR: hand; HEIGHT: 22px" align="center"
-												width="18%">${product.pid}</td>
+												width="9%">${product.pid}</td>
 											<td style="CURSOR: hand; HEIGHT: 22px" align="center"
 												width="17%"><img width="40" height="45" src="${pageContext.request.contextPath}/${product.pimage}"></td>
 											<td style="CURSOR: hand; HEIGHT: 22px" align="center"
@@ -70,9 +102,9 @@
 														border="0" style="CURSOR: hand">
 											</a></td>
 
-											<td align="center" style="HEIGHT: 22px"><a href="#"> <img
+											<td align="center" style="HEIGHT: 22px"><a href="${pageContext.request.contextPath}/DeleteServlet?id=${product.pid}" id="delete-link"> <img
 													src="${pageContext.request.contextPath}/images/i_del.gif"
-													width="16" height="16" border="0" style="CURSOR: hand">
+													width="16" height="16" border="0" style="CURSOR: hand" onclick="return confirm('确认要删除吗')">
 											</a></td>
 										</tr>
 									</c:forEach>
@@ -84,13 +116,84 @@
 			</TBODY>
 		</table>
 	</form>
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">
+			<li class="page-item">
+				<a class="page-link" href="#" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			<c:forEach begin="1" end="10" var="i">
+				<li class="page-item"><a class="page-link" href="#">${i}</a></li>
+			</c:forEach>
+
+			<li class="page-item">
+				<a class="page-link" href="#" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
 </body>
+<script src="${pageContext.request.contextPath}/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/webjars/jquery/3.5.1/jquery.min.js"> </script>
 <script>
+	function searchWord() {
+		var selectCid = $("#categorySelect").val();
+		var keyWord = $("#search").val();
+		$.ajax({
+			url:"/shop/SearchKeyWordServlet",
+			type:"POST",
+			data:{
+				"cid":selectCid,
+				"keyWord":keyWord
+			},
+			success:function(data){
+				for(var i=0;i<data.length;i++){
+					var product=data[i];
+					var str=product.pname;
+					/* 	<li class="list-group-item">aaaa</li>	 */
+					$("#itemul").append("<li class='list-group-item'>"+str+"</li>")
+				}
+				$("#completeShow").show();
+			},
+			error:function(){
+				alert('请求失败')
+			}
+		})
+	}
+	// $("#queryKeyWord").click(searchWord)
+	$("#search").keyup(searchWord)
 	var list = '<%=request.getAttribute("productList")%>'
 	if(list=='null'){
 		location.href="/shop/ProductServlet";
 	}
-	console.log(list)
+	var success = '${param.success}'
+	if(success !=null && success !==''){
+		if(success == 'true'){
+			alert("删除成功")
+		}else alert("删除失败")
+	}
+	var productBoxes = $(".productBox");
+	$("#selectAll").click(function () {
+		$(".productBox").prop("checked",$("#selectAll").prop("checked"))
+	});
+	productBoxes.click(function () {
+		$("#selectAll").prop("checked",productBoxes.length===productBoxes.filter("checked").length)
+	});
+	
+	$("#delete").click(function () {
+		var selectBoxes = $(".productBox:checked");
+		var selectIds=[];
+		selectBoxes.each(function () {
+			selectIds.push($(this).val());
+		})
+		console.log(selectIds)
+		let flag = confirm("确认");
+		if(selectIds.length > 0 && flag){
+			window.location.href = "/shop/DeleteSelectServlet?selectIds=" + selectIds.join(",");
+		}
+	})
 </script>
 </HTML>
 

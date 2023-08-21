@@ -56,4 +56,24 @@ public class ProductServiceImpl implements ProductService {
         sqlSession.commit();
         return updateProduct;
     }
+
+    @Override
+    public int deleteById(int pid) {
+        SqlSession sqlSession = SqlSessionUtils.getSession();
+        int deleteById = sqlSession.delete("deleteById", pid);
+        sqlSession.commit();
+        return deleteById;
+    }
+
+    @Override
+    public int getTotalRecord() {
+        SqlSession sqlSession = SqlSessionUtils.getSession();
+        return sqlSession.selectOne("getTotalRecord");
+    }
+
+    @Override
+    public List<Product> findAllByWord(String word) {
+        SqlSession sqlSession = SqlSessionUtils.getSession();
+        return sqlSession.selectList("findAllByWord", word);
+    }
 }

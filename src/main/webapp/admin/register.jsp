@@ -21,7 +21,8 @@
         <td class="inputs">
           <input name="username" type="text" id="username">
           <br>
-          <span id="username_err" class="err_msg" style="display: none">用户名不太受欢迎</span>
+          <span id="username-status"></span>
+<%--          <span id="username_err" class="err_msg" style="display: none">用户名不太受欢迎</span>--%>
         </td>
       </tr>
       <tr>
@@ -53,6 +54,31 @@
 <script>
   $("#verifyPic").click(function(){
     $(this).attr("src", "${pageContext.request.contextPath}/CheckCodeServlet?"+new Date().getMilliseconds())
+  })
+  $("#username").on("blur",function (){
+
+    var username = $(this).val();
+    var spanElement = $("#username-status");
+    $.ajax({
+      url:"${pageContext.request.contextPath}/CheckUsernameServlet",
+      type:"GET",
+      data:{username:username},
+      success:function (response) {
+        if(response.available){
+            spanElement.text("用户名可用").css("color","green");
+        }else {
+            spanElement.text("用户名被占用").css("color","red");
+        }
+      },
+      error:function (){
+          spanElement.text("请求失败").css("color","red");
+      }
+    });
+    if(username === ""||username === 'null'){
+        spanElement.hide();
+    }else {
+        spanElement.show();
+    }
   })
 </script>
 </html>

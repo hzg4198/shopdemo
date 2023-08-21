@@ -9,4 +9,6 @@ public interface UserService {
     List<User> findAll();
     List<User> queryOne(User user);
     int insertConsumer(User user);
+    boolean queryByName(String username);
+
 }

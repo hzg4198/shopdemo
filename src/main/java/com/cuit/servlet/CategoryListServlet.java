@@ -18,7 +18,6 @@ public class CategoryListServlet extends HttpServlet {
 		List<Category> category = categoryService.getCategory();
 		request.setAttribute("categoryList", category);
 		request.getRequestDispatcher("/admin/product/add.jsp").forward(request,response);
-
 	}
 
 	@Override

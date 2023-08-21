@@ -9,20 +9,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "DeleteServlet", value = "/DeleteServlet")
-public class DeleteServlet extends HttpServlet {
+@WebServlet(name = "DeleteSelectServlet", value = "/DeleteSelectServlet")
+public class DeleteSelectServlet extends HttpServlet {
     private final ProductServiceImpl productService = new ProductServiceImpl();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
-        int affectedRows = productService.deleteById(Integer.parseInt(request.getParameter("id")));
-        response.sendRedirect(request.getContextPath()+"/admin/product/list.jsp?success="+((affectedRows > 0)?"true":"false"));
-
+        String selectIds = request.getParameter("selectIds");
+        String[] ids = selectIds.split(",");
+        int affectedRows = 0;
+        for (String id : ids) {
+            int i = productService.deleteById(Integer.parseInt(id));
+            affectedRows += i;
+        }
+        response.sendRedirect(request.getContextPath()+"/admin/product/list.jsp?success="+((affectedRows == ids.length)?"true":"false"));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request,response);
+        doGet(request, response);
     }
 }

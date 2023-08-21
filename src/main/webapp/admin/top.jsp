@@ -58,7 +58,7 @@ TH {
 										<td width="155" valign="bottom"
 											background="${pageContext.request.contextPath}/images/mis_05b.jpg">
 											用户名：
-											<font color="blue">${sessionScope.username}</font>
+											<font color="blue">${sessionScope.username==null?"游客":sessionScope.username}</font>
 										</td>
 										<td width="10" align="right"
 											background="${pageContext.request.contextPath}/images/mis_05b.jpg">

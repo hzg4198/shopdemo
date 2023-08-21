@@ -40,4 +40,16 @@
         </set>
         where pid = #{pid}
     </update>
+    <delete id="deleteById" parameterType="int">
+        delete from product where pid=#{pid}
+    </delete>
+
+    <select id="getTotalRecord" resultType="int">
+        select count(*) from product
+    </select>
+
+    <select id="findAllByWord" resultMap="ProductMap" >
+        select *
+        from product where pname like concat('%',#{word},'%')
+    </select>
 </mapper>

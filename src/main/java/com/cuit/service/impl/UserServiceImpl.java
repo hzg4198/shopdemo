@@ -33,6 +33,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean queryByName(String username) {
+        SqlSession session = SqlSessionUtils.getSession();
+        return session.selectList("queryOne", username).isEmpty();
+    }
+
+    @Override
     public int insertConsumer(User user) {
         SqlSession sqlSession = SqlSessionUtils.getSession();
         Map<String,Object> params = new HashMap<>();
