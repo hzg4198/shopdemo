@@ -56,7 +56,6 @@
     $(this).attr("src", "${pageContext.request.contextPath}/CheckCodeServlet?"+new Date().getMilliseconds())
   })
   $("#username").on("blur",function (){
-
     var username = $(this).val();
     var spanElement = $("#username-status");
     $.ajax({

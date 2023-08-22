@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "SearchKeyWordServlet", value = "/SearchKeyWordServlet")
+@WebServlet(value = "/SearchKeyWordServlet")
 public class SearchKeyWordServlet extends HttpServlet {
     private final ProductServiceImpl productService = new ProductServiceImpl();
     @Override

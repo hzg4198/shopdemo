@@ -22,7 +22,7 @@
 			width: 190px;
 			z-index: 100;
 			background-color: #fff;
-			left: 230px;
+			left: 1030px;
 			display: none
 		}
 	</style>
@@ -90,7 +90,7 @@
 											<td style="CURSOR: hand; HEIGHT: 22px" align="center"
 												width="17%"><img width="40" height="45" src="${pageContext.request.contextPath}/${product.pimage}"></td>
 											<td style="CURSOR: hand; HEIGHT: 22px" align="center"
-												width="17%">${product.pname}</td>
+												width="17%" class="gaoliang">${product.pname}</td>
 											<td style="CURSOR: hand; HEIGHT: 22px" align="center"
 												width="17%">${product.market_price}</td>
 											<td style="CURSOR: hand; HEIGHT: 22px" align="center"
@@ -149,21 +149,62 @@
 				"keyWord":keyWord
 			},
 			success:function(data){
+
+				$("#itemul").empty();
 				for(var i=0;i<data.length;i++){
 					var product=data[i];
 					var str=product.pname;
 					/* 	<li class="list-group-item">aaaa</li>	 */
-					$("#itemul").append("<li class='list-group-item'>"+str+"</li>")
+					var startIndex = str.indexOf(keyWord);
+					var endIndex = startIndex + keyWord.length;
+					var highlighted = str.substring(0, startIndex) +
+							"<span style='color: blue;'>" + keyWord + "</span>" +
+							str.substring(endIndex);
+					$("#itemul").append("<li class='list-group-item list-group-item-action' onclick='shangping(this.textContent)'>"+highlighted+"</li>")
+
+					/*$("#itemul").append("<li class='list-group-item'>"+str+"</li>")*/
 				}
-				$("#completeShow").show();
+				if(keyWord !== null && keyWord !== ""){
+					$("#completeShow").show();
+				}else{
+					$("#completeShow").hide();
+				}
 			},
 			error:function(){
 				alert('请求失败')
 			}
 		})
 	}
+
+	function shangping(eleval) {
+		/*  var clickedValue = eleval; */
+		$("#search").val(eleval);
+		$("#completeShow").hide();
+		location.href="/shop/ProductServlet?word="+eleval+"&&cid="+$("#categorySelect").val();
+	};
+
+/*	$("#categorySelect").change(function(){
+		location.href="/shop/ProductServlet?cid="+$(this).val();
+	});*/
+
+	$(".gaoliang").each(function() {
+
+		var inputValue = $("#search").val();
+		var pname = $(this).text();
+
+		var startIndex = pname.indexOf(inputValue);
+		var endIndex = startIndex + inputValue.length;
+
+		var highlighted = pname.substring(0, startIndex) +
+				"<span style='color: blue;'>" + inputValue + "</span>" +
+				pname.substring(endIndex);
+
+		$(this).html(highlighted);
+
+	});
 	// $("#queryKeyWord").click(searchWord)
-	$("#search").blur(searchWord)
+	$("#search").keyup(searchWord)
+
 	var list = "${pageBean.data}"
 	if(list=='null'||list==""){
 		location.href="/shop/ProductServlet";

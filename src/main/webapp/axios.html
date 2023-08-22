@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script src="webjars/axios/0.18.0/dist/axios.js"></script>
+<script type="text/javascript">
+  axios({
+    method:"get",
+    url:"http://localhost:8080/shop/AjaxServlet?username=zhangsan"
+  }).then(function (resp) {
+    console.log(resp.data)
+  })
+</script>
+</html>

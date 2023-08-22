@@ -1,14 +1,9 @@
 package com.cuit.servlet;
 
-import cn.hutool.extra.servlet.ServletUtil;
-import com.cuit.dao.UserDao;
 import com.cuit.entity.Category;
 import com.cuit.entity.PageBean;
-import com.cuit.entity.Product;
 import com.cuit.service.impl.CategoryServiceImpl;
 import com.cuit.service.impl.ProductServiceImpl;
-import com.cuit.utils.SqlSessionUtils;
-import org.apache.ibatis.session.SqlSession;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet(name = "ProductServlet", value = "/ProductServlet")
 public class ProductServlet extends HttpServlet {
@@ -40,6 +34,8 @@ public class ProductServlet extends HttpServlet {
 
         String pageSize="5";
         PageBean pageBean = productService.findAll(cid, keyWord, pageNumber, pageSize);
+        System.out.println(pageBean);
+
         request.setAttribute("pageBean", pageBean);
         request.setAttribute("pname",keyWord);
 
