@@ -79,9 +79,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> queryPage(int start, int pageSize) {
+    public List<Product> queryPage(Integer cid, String word, int start, int pageSize) {
         return null;
     }
+
 
     @Override
     public PageBean findAll(String cid, String keyWord, String pageNumberStr, String pageSizeStr) {
@@ -100,15 +101,48 @@ public class ProductServiceImpl implements ProductService {
         }else {
             pageNumber = Integer.parseInt(pageNumberStr);
         }
-        int totalRecord = getTotalRecord();
+        int totalRecord;
+
+        if(cid==null&(keyWord==null || keyWord.equals(""))){
+            totalRecord=getTotalRecord();
+        }else{
+            System.out.println("_____--------");
+            Integer id;
+            if(cid==null|| cid.equals("")){
+                id = null;
+            }else {
+                id = Integer.parseInt(cid);
+            }
+            System.out.println("id="+id);
+            System.out.println("keyWord="+keyWord);
+            totalRecord = getTotalRecordByCondition(id,keyWord);
+        }
+        System.out.println("totalRecord="+totalRecord);
         int totalPage = (totalRecord+pageSize-1)/pageSize;
         //数据库查询的时候需要的开始索引
         int startIndex=(pageNumber-1)*pageSize;
         PageBean pageBean = new PageBean(pageNumber, pageSize, totalRecord, totalPage, startIndex);
         params.put("start", startIndex);
         params.put("pageSize", pageSize);
+        Integer id1;
+        if(cid==null|| cid.equals("")){
+            id1 = null;
+        }else {
+            id1 = Integer.parseInt(cid);
+        }
+        params.put("cid",id1);
+        params.put("word",keyWord);
         List<Product> list =  SqlSessionUtils.getSession().selectList("queryPage",params);
         pageBean.setData(list);
         return pageBean;
+    }
+
+    @Override
+    public int getTotalRecordByCondition(Integer cid, String word) {
+        SqlSession sqlSession = SqlSessionUtils.getSession();
+        Map<String,Object> params = new HashMap<>();
+        params.put("cid",cid);
+        params.put("word",word);
+        return sqlSession.selectOne("getTotalRecordByCondition", params);
     }
 }

@@ -48,6 +48,18 @@
         select count(*) from product
     </select>
 
+    <select id="getTotalRecordByCondition" resultType="int">
+        select count(*) from product
+        <where>
+            <if test="cid != null">
+                and cid = #{cid}
+            </if>
+            <if test="word != null and word != ''">
+                and pname like concat('%', #{word}, '%')
+            </if>
+        </where>
+    </select>
+
     <select id="findAllByWord" resultMap="ProductMap" >
         select *
         from product where pname like concat('%',#{word},'%')
@@ -59,8 +71,8 @@
             <if test="cid != null">
                 and cid = #{cid}
             </if>
-            <if test="keyWord != null and keyWord != ''">
-                and pname like concat('%', #{keyWord}, '%')
+            <if test="word != null and word != ''">
+                and pname like concat('%', #{word}, '%')
             </if>
         </where>
         limit #{start},#{pageSize}

@@ -81,7 +81,6 @@
 								<c:forEach items="${categoryList}" var="c">
 									<option  ${c.cid==item.cid? "selected":""} value="${c.cid}">${c.cname}</option>
 								</c:forEach>
-
 							</select>
 						</td>
 					</tr>

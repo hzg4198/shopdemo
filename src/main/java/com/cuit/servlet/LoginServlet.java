@@ -7,10 +7,7 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
@@ -43,6 +40,16 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("/admin/index.jsp?"+new Date().getTime()).forward(request,response);
         }else {
             HttpSession session = request.getSession();
+            if(request.getParameter("remember")!=null&&request.getParameter("remember").equals("1")){
+                Cookie c=new Cookie("username", user.getUsername());
+                c.setMaxAge(300);
+                response.addCookie(c);
+            }
+            if(request.getParameter("remember2")!=null&&request.getParameter("remember2").equals("1")){
+                Cookie cookie=new Cookie("autologin",user.getUsername()+"@"+user.getPassword());
+                cookie.setMaxAge(300);
+                response.addCookie(cookie);
+            }
             session.setAttribute("username",user.getUsername());
             response.sendRedirect(request.getContextPath()+"/admin/home.jsp");
         }

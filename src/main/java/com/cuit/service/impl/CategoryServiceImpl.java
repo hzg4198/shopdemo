@@ -14,4 +14,5 @@ public class CategoryServiceImpl implements CategoryService {
 		SqlSession session = SqlSessionUtils.getSession();
 		return session.selectList("getCategory");
 	}
+
 }

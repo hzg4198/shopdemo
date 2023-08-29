@@ -38,6 +38,8 @@ public class ProductServlet extends HttpServlet {
 
         request.setAttribute("pageBean", pageBean);
         request.setAttribute("pname",keyWord);
+        request.setAttribute("cid",cid);
+
 
 //        List<Product> productList = productService.findAllProduct();
         List<Category> category = categoryService.getCategory();

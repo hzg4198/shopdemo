@@ -32,7 +32,7 @@
 	<br>
 	<form id="Form1" name="Form1"
 <%--		action="${pageContext.request.contextPath}/user/list.jsp"--%>
-			action="#"
+			action="${pageContext.request.contextPath}/ProductServlet"
 		method="post">
 		<table cellSpacing="1" cellPadding="0" width="100%" align="center"
 			bgColor="#f5fafe" border="0" >
@@ -43,8 +43,8 @@
 				</tr>
 				<tr>
 					<td class="ta_01" align="right">
-						<form href="${pageContext.request.contextPath}/ProductServlet">
-						商品分类：<select name="cid" id="categorySelect" >
+<%--						<form href="${pageContext.request.contextPath}/ProductServlet" >--%>
+							商品分类：<select name="cid" id="categorySelect" >
 									<option value="">---------</option>
 									<c:forEach items="${requestScope.categoryList}" var="items">
 										<option value="${items.cid}">${items.cname}</option>
@@ -56,7 +56,7 @@
 								<!-- 		<li class="list-group-item">aaaa</li>	  -->
 							</ul>
 						</div>
-						</form>
+<%--						</form>--%>
 						<button  class="btn btn-primary"  type="button" id="delete" name="delete" >删除所选</button>
 						<button  class="btn btn-primary"  type="button" id="add" name="add" value="添加"
 							class="button_add" onclick="addProduct()">
@@ -118,17 +118,17 @@
 	</form>
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
-			<li class="page-item">
-				<a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${pageBean.pageNumber-1 }" aria-label="Previous">
+			<li class="page-item ${pageBean.pageNumber-1 == 0 ? 'disabled' : ''}">
+				<a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${pageBean.pageNumber-1 }&&cid=${cid}&&word=${pname}" aria-label="Previous">
 					<span aria-hidden="true">&laquo;</span>
 				</a>
 			</li>
 			<c:forEach begin="1" end="${pageBean.totalPage }" var="i">
-				<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${i }">${i}</a></li>
+				<li class="page-item ${i == pageBean.pageNumber ? 'active' : ''}"><a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${i }&&cid=${cid}&&word=${pname}">${i}</a></li>
 			</c:forEach>
 
-			<li class="page-item">
-				<a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${i }" aria-label="Next">
+			<li class="page-item ${pageBean.pageNumber+1 > pageBean.totalPage ? 'disabled' : ''}">
+				<a class="page-link" href="${pageContext.request.contextPath }/ProductServlet?pageNumber=${pageBean.pageNumber +  }&&cid=${cid}&&word=${pname}" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
 			</li>
@@ -138,9 +138,22 @@
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/webjars/jquery/3.5.1/jquery.min.js"> </script>
 <script>
+
+	<%--$("ul.pagination li.page-item a.page-link").each(function() {--%>
+	<%--	var modifiedEleval = encodeURIComponent($("#search").val());--%>
+	<%--	var modifiedCategorySelectVal = encodeURIComponent($("#categorySelect").val());--%>
+
+	<%--	var pageNumber = $(this).text();--%>
+	<%--	var updatedHref = "${pageContext.request.contextPath}/ProductServlet?pageNumber=" + pageNumber + "&&cid=" + modifiedCategorySelectVal + "&&word=" + modifiedEleval;--%>
+	<%--	console.log(updatedHref)--%>
+	<%--	$(this).attr("href", updatedHref);--%>
+	<%--});--%>
+
+
 	function searchWord() {
 		var selectCid = $("#categorySelect").val();
 		var keyWord = $("#search").val();
+
 		$.ajax({
 			url:"/shop/SearchKeyWordServlet",
 			type:"POST",
@@ -148,21 +161,18 @@
 				"cid":selectCid,
 				"keyWord":keyWord
 			},
-			success:function(data){
 
+			success:function(data){
 				$("#itemul").empty();
+				var keyWord = $("#search").val();
+				var keyWordRegExp = new RegExp(keyWord, 'i'); // 不区分大小写的正则表达式
 				for(var i=0;i<data.length;i++){
 					var product=data[i];
-					var str=product.pname;
-					/* 	<li class="list-group-item">aaaa</li>	 */
-					var startIndex = str.indexOf(keyWord);
-					var endIndex = startIndex + keyWord.length;
-					var highlighted = str.substring(0, startIndex) +
-							"<span style='color: blue;'>" + keyWord + "</span>" +
-							str.substring(endIndex);
+					var str = product.pname;
+					var highlighted = str.replace(keyWordRegExp, function(match) {
+						return "<span style='color: blue;'>" + match + "</span>";
+					});
 					$("#itemul").append("<li class='list-group-item list-group-item-action' onclick='shangping(this.textContent)'>"+highlighted+"</li>")
-
-					/*$("#itemul").append("<li class='list-group-item'>"+str+"</li>")*/
 				}
 				if(keyWord !== null && keyWord !== ""){
 					$("#completeShow").show();
@@ -174,30 +184,37 @@
 				alert('请求失败')
 			}
 		})
+
 	}
 
 	function shangping(eleval) {
-		/*  var clickedValue = eleval; */
-		$("#search").val(eleval);
+		//将+号替换为URL编码形式
+		var modifiedEleval = eleval.replace(/\+/g, '%2B');
+		console.log(modifiedEleval);
+		// 使用经过处理的值来显示在搜索框中
+		$("#search").text(modifiedEleval);
 		$("#completeShow").hide();
-		location.href="/shop/ProductServlet?word="+eleval+"&&cid="+$("#categorySelect").val();
+		// 对categorySelect的值进行编码
+		var categorySelectVal = encodeURIComponent($("#categorySelect").val());
+		location.href = "/shop/ProductServlet?word=" + modifiedEleval + "&&cid=" + categorySelectVal;
 	};
-
-/*	$("#categorySelect").change(function(){
-		location.href="/shop/ProductServlet?cid="+$(this).val();
-	});*/
 
 	$(".gaoliang").each(function() {
 
-		var inputValue = $("#search").val();
 		var pname = $(this).text();
+		var keyWord = $("#search").val();
+		var keyWordRegExp = new RegExp(keyWord, 'i'); // 不区分大小写的正则表达式
 
-		var startIndex = pname.indexOf(inputValue);
+		/*var startIndex = pname.indexOf(inputValue);
 		var endIndex = startIndex + inputValue.length;
 
 		var highlighted = pname.substring(0, startIndex) +
 				"<span style='color: blue;'>" + inputValue + "</span>" +
-				pname.substring(endIndex);
+				pname.substring(endIndex);*/
+
+		var highlighted = pname.replace(keyWordRegExp, function(match) {
+			return "<span style='color: blue;'>" + match + "</span>";
+		});
 
 		$(this).html(highlighted);
 

@@ -12,6 +12,9 @@ public interface ProductService{
     int deleteById(int pid);
     int getTotalRecord();
     List<Product> findAllByWord(String word);
-    List<Product> queryPage(int start, int pageSize);
+    List<Product> queryPage(Integer cid, String word, int start, int pageSize);
+
     PageBean findAll(String cid, String keyWord, String pageNumber, String pageSize);
+    int getTotalRecordByCondition(Integer cid,String word);
+
 }

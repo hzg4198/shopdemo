@@ -15,9 +15,19 @@
     <form  action="${pageContext.request.contextPath}/LoginServlet" id="form">
 <%--    <form  action="/shop/LoginServlet" id="form">--%>
         <h1 id="loginMsg">LOGIN IN</h1>
-        <p>Username:<input id="username" name="username" type="text"></p>
+        <p>Username:<input id="username" name="username" type="text" value="${cookie.username.value }"></p>
         <p>Password:<input id="password" name="password" type="password"></p>
         <p>验证码：<input id="verify" name="verify" type="text"><img id="verifyPic" src="${pageContext.request.contextPath}/CheckCodeServlet"></p>
+    <div class="checkbox-row">
+        <p>
+            <label class="checkbox-label">
+                记住我:<input type="checkbox" class="form-control" name="remember" id="exampleInputPassword1" value="1">
+            </label>
+            <label class="checkbox-label">
+                自动登录:<input type="checkbox" class="form-control2" name="remember2" id="exampleInputPassword2" value="1">
+            </label>
+        </p>
+    </div>
         <span style="margin-left: 20px;color:#FF5765"><%= request.getAttribute("msg") != null ? request.getAttribute("msg") : "" %></span>
         <span style="margin-left: 20px;color: rgb(173,216,230)">${param.msg}</span>
         <div id="subDiv">
